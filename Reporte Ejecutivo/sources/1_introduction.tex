@@ -1,0 +1,59 @@
+\section{Introducción}
+
+Este informe detalla una vulnerabilidad identificada en la máquina de prueba \textbf{Infovore 1 de la plataforma Vulnhub} (\href{https://www.vulnhub.com/entry/infovore-1,496/}{Ver en Vulnhub}). La explotación de esta falla podría comprometer la seguridad del sistema y permitir accesos no autorizados. En este análisis, se examina el nivel de riesgo y se presentan estrategias de mitigación.
+
+\section{Descripción de la Vulnerabilidad}
+
+\textbf{El servidor tiene el puerto 80 abierto}, lo que normalmente permite que ciertos archivos y servicios sean accesibles desde internet. Durante la evaluación, \textbf{se identificó un archivo PHP que revela información técnica} sobre la configuración del servidor.
+
+Este archivo está \textbf{configurado de tal manera que permite la carga de otros archivos en el servidor}, lo que puede facilitar ataques mediante una técnica conocida como Local File Inclusion (LFI). \textbf{Si un atacante explota esta vulnerabilidad, podría ejecutar comandos remotamente y tomar el control del servidor}.
+
+\section{Impacto Potencial}
+
+Si un atacante usa LFI con éxito, \textbf{podrá ingresar inicialmente a un contenedor}, que es un espacio aislado dentro del servidor. Aunque este contenedor no da acceso completo al sistema, \textbf{aquí se ha abierto el puerto 22, el cual permite conexiones remotas}, y está accesible desde este entorno.
+
+Durante el análisis de este contenedor, \textbf{se encontró un archivo oculto llamado oldkeys.tgz}, que contiene una clave privada y una clave pública. Si un atacante logra descifrar la clave privada mediante herramientas automatizadas, podría obtener acceso privilegiado dentro del contenedor.
+
+Desde ese punto, \textbf{el atacante podría escalar privilegios hasta obtener acceso de administrador y salir del contenedor para comprometer la máquina principal. Una vez dentro, podría aprovechar configuraciones del grupo Docker para incrementar aún más sus permisos, obteniendo control total sobre los archivos y otros contenedores en el servidor}.
+
+\section{Riesgos Asociados}
+\begin{itemize}
+    \item \textbf{Exposición de información sensible}: El archivo PHP revela detalles internos del servidor, facilitando futuros ataques.
+    \item \textbf{Escalamiento de privilegios}: Un atacante podría obtener permisos administrativos sin autorización.
+    \item \textbf{Acceso no autorizado}: Con privilegios elevados, el atacante puede ejecutar comandos maliciosos o modificar configuraciones críticas.
+    \item \textbf{Compromiso de información}: Si el atacante logra el control del servidor, puede acceder y robar datos sensibles.
+\end{itemize}
+
+\section{Recomendaciones y Medidas de Mitigación}
+\begin{itemize}
+    \item \textbf{Restringir el acceso al puerto 80}: Configurar reglas de firewall para limitar el acceso desde internet.
+    \item \textbf{Eliminar o proteger el archivo PHP-info}: Revisar que la configuración del servidor no sea accesible públicamente.
+    \item \textbf{Monitorear el tráfico del servidor}: Activar alertas que detecten accesos sospechosos o intentos de ataque.
+    \item \textbf{Revisar permisos y configuraciones en Docker}: Restringir privilegios innecesarios para prevenir accesos no autorizados.
+    \item \textbf{Fortalecer claves y credenciales}: No almacenar claves privadas en archivos visibles y utilizar métodos de cifrado robustos.
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \caption{Resumen de vulnerabilidad y mitigaciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Riesgo} & \textbf{Impacto} & \textbf{Solución} \\ \hline
+    Exposición de información & Acceso no autorizado & Eliminación de archivos expuestos \\ \hline
+    Escalamiento de privilegios & Control total del servidor & Revisión de permisos \\ \hline
+    Compromiso de datos & Robo de información empresarial & Implementación de cifrado \\ \hline
+    \end{tabular}
+    \label{tab:resumen}
+\end{table}
+
+\section{Conclusión}
+
+La configuración del servidor Infovore 1 presenta un riesgo significativo porque permite que un atacante acceda a un contenedor y aumente sus privilegios hasta tomar el control de la máquina principal. La exposición de información interna y la reutilización de credenciales facilitan este proceso. 
+
+Las soluciones propuestas en este informe no solo corrigen la vulnerabilidad detectada, sino que también ayudan a reforzar la seguridad del sistema en general. Es fundamental limitar el acceso a servicios innecesarios, proteger archivos sensibles y mejorar la gestión de permisos para evitar accesos no autorizados. 
+
+Implementar estas medidas reducirá el riesgo de ataque y garantizará un entorno más seguro contra futuras amenazas.
+
+La \autoref{tab:resumen} resume los riesgos detectados y sus posibles soluciones.
+
+\bibliographystyle{plain}

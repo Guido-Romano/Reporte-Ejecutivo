@@ -1,0 +1,98 @@
+\documentclass[12pt,oneside,letterpaper,spanish]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.25cm,headheight=26pt,includeheadfoot]{geometry}
+\usepackage[spanish]{babel}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage[framed, numbered]{matlab-prettifier}
+\usepackage{changepage}
+\usepackage{amsmath}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue, pdfborder={0 0 0}]{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{caption}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{multirow}
+\usepackage{titling}
+\usepackage{float}
+\usepackage{comment}
+\usepackage{booktabs}
+\usepackage{indentfirst}
+\usepackage{lscape}
+\usepackage{booktabs,caption}
+\usepackage[flushleft]{threeparttable}
+\usepackage[spanish]{nomencl}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{datetime2}
+
+
+
+% --- Configuración del pie de página y encabezado ---
+\pagestyle{fancy}
+\fancyhf{}
+
+\setlength{\parindent}{2em}
+\title{Informe ejecutivo infovore: I} % Para hacer referencia como \title, no usar \maketitle
+\makeatletter\let\Title\@title\makeatother
+
+\lstset{language=Matlab,
+style=Matlab-editor,
+basicstyle=\normalsize\mlttfamily,
+numbers=left,
+numberstyle={\scriptsize\color{black}},	% Tamaño de los números
+numbersep=0.5cm											
+}
+
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{leftmargin=1.5cm,label = Paso \arabic*:}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\renewcommand{\rmdefault}{ptm}
+
+%\lhead{\Title}
+\rhead{\nouppercase{\rightmark}}
+\lhead{\Title}
+\rfoot{\includegraphics[height=1.5cm]{root/vulnhub_tiny.png}} % Logotipo en el pie de página derecho
+\setlength\headheight{16pt}
+\setlength{\footskip}{90pt}
+\lhead{\Title} % Título en el encabezado izquierdo
+\cfoot{\thepage}
+\setlength{\parskip}{1.25em} % Ajusta el espacio después de cada párrafo
+
+
+% --- Fin de la configuración de página ---
+
+\begin{document}
+\pagenumbering{roman} 
+\input{sources/0_frontpage.tex}
+
+\newpage
+\doublespacing
+%\addcontentsline{toc}{section}{Tabla de Contenidos}
+\renewcommand{\baselinestretch}{1}\normalsize
+\tableofcontents
+\renewcommand{\baselinestretch}{1}\normalsize
+%\singlespacing
+\thispagestyle{fancy} % Forzar estilo de página
+
+\newpage
+\pagenumbering{arabic} 
+\fancyfoot[C]{Página \thepage\ de \pageref{endOfDoc}}
+
+\input{sources/1_introduction.tex} 
+
+\label{EndOfText}
+
+\newpage
+\addcontentsline{toc}{section}{Nomenclatura}
+\input{sources/9_nomenclat.tex}
+
+\label{endOfDoc}
+\end{document}
